@@ -1,0 +1,23 @@
+const dotenv = require('dotenv');
+dotenv.config();
+const express = require('express');
+const app = express();
+const mongoose = require('mongoose');
+const logger = require('morgan');
+
+mongoose.connect(process.env.MONGODB_URI);
+
+mongoose.connection.on('connected', () => {
+  console.log(`Connected to MongoDB`);
+});
+
+app.use(express.json());
+app.use(logger('dev'));
+const petCtrl = require('./controllers/pets')
+
+// routes/controllers go here
+app.use('/pets', petCtrl)
+
+app.listen(3000, () => {
+  console.log('The express app is ready!');
+});
